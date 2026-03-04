@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body{
+            
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;  
+        }
+
+        button{
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+        }
+
+        img{
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px black;
+        }
+    </style>
+</head>
+
+<body>
+
+   <button onclick="gerarFato()">Gerar fato</button>
+
+    <img src="imagens.webp" width="300">
+
+    <p><strong>Fato original:</strong></p>
+    <p id="fatoOriginal"></p>
+
+    <p><strong>Tradução:</strong></p>
+    <p id="fatoTraduzido"></p>
+    <script>
+    async function gerarFato() {
+        try {
+            // pegar fato
+            const resposta = await fetch("https://catfact.ninja/fact");
+            const dados = await resposta.json();
+            const fatoOriginal = dados.fact;
+
+            document.getElementById("fatoOriginal").innerText = fatoOriginal;
+
+            // traduzir usando API pública de tradução
+            const traducaoResposta = await fetch("https://api.mymemory.translated.net/get?q=" 
+                + encodeURIComponent(fatoOriginal) + "&langpair=en|pt");
+
+            const traducaoDados = await traducaoResposta.json();
+            const fatoTraduzido = traducaoDados.responseData.translatedText;
+
+            document.getElementById("fatoTraduzido").innerText = fatoTraduzido;
+
+        } catch (erro) {
+            console.log("Erro:", erro);
+        }
+}
+</script>
+
+</body>
+</html>
